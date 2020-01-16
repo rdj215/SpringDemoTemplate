@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,11 +20,43 @@ public class PersonController {
         this.service=service;
     }
 
-    @GetMapping("/findAll")
+
+    @GetMapping("/person/")
     public ResponseEntity<?> findAll() {
         Iterable<Person> allPeople = service.findAll();
         ResponseEntity<?> response = new ResponseEntity<>(allPeople, HttpStatus.OK);
         return response;
     }
 
+
+    @GetMapping("/person/{id}")
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+       Person person = service.findById(id);
+        ResponseEntity<?> responseEntity = new ResponseEntity<>(person, HttpStatus.OK);
+        return responseEntity;
+
+    }
+
+    @PostMapping("/person/")
+    public ResponseEntity<?> create(@RequestBody Person person){
+        person = service.create(person);
+        ResponseEntity<?> response = new ResponseEntity<>(person,HttpStatus.CREATED);
+        return response;
+
+        }
+
+
+     @PutMapping("/person/{id}")
+     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Person person){
+       Person responseBody = service .update(id,person);
+        ResponseEntity responseEntity = new ResponseEntity<>(responseBody, HttpStatus.OK );
+        return responseEntity;
+     }
+
+   @DeleteMapping("/person/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+       Person person = service.delete(id);
+          ResponseEntity<?> response = new ResponseEntity<>(person,HttpStatus.OK);
+          return response;
+        }
 }
